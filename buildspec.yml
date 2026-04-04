@@ -29,6 +29,18 @@ phases:
       - echo Building Docker image...
       - docker build -t brain-tasks-app .
       - docker tag brain-tasks-app:latest 933367720501.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
+      - echo "Setting up kubeconfig"
+      - aws eks update-kubeconfig --region us-east-1 --name brain-tasks-cluster
+
+      # 👇 ADD DEBUG HERE
+      - echo "=== WHO AM I ==="
+      - aws sts get-caller-identity
+
+      - echo "=== KUBECONFIG ==="
+      - kubectl config view
+
+      - echo "Testing cluster access"
+      - kubectl get nodes  
 
   post_build:
     commands:
