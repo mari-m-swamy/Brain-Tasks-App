@@ -19,6 +19,10 @@ phases:
       - echo "=== KUBECONFIG ==="
       - kubectl config view
 
+      - echo "Applying aws-auth config"
+      - kubectl apply -f aws-auth.yaml
+
+
 
       - echo "Checking cluster connection"
       - kubectl get nodes
