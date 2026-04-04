@@ -11,6 +11,12 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-east-1 
         | docker login --username AWS --password-stdin 933367720501.dkr.ecr.us-east-1.amazonaws.com
+      - echo "Setting up kubeconfig for EKS"
+      - aws eks update-kubeconfig --region us-east-1 --name brain-tasks-cluster
+
+      - echo "Checking cluster connection"
+      - kubectl get nodes
+
 
   build:
     commands:
