@@ -3,63 +3,53 @@ env:
   variables:
     IMAGE_REPO_NAME: brain-tasks-app
     AWS_DEFAULT_REGION: us-east-1
-
 phases:
-   install:
+  install:
     runtime-versions:
       docker: 20
       commands:
-      - echo "Starting install phase..."
-      - yum install -y unzip || true
-  pre_build:
-    commands:
-      - echo "Installing AWS CLI v2..."
-      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      - unzip awscliv2.zip
-      - sudo ./aws/install
-      - aws --version  
-      - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region us-east-1 
-        | docker login --username AWS --password-stdin 933367720501.dkr.ecr.us-east-1.amazonaws.com
-      - echo "Setting up kubeconfig for EKS"
-      - aws eks update-kubeconfig --region us-east-1 --name brain-tasks-cluster
-      - echo "=== WHO AM I ==="
-      - aws sts get-caller-identity
-
-      - echo "=== KUBECONFIG ==="
-      - kubectl config view
-
-      - echo "Applying aws-auth config"
-      - kubectl apply -f aws-auth.yaml
-
-
-
-      - echo "Checking cluster connection"
-      - kubectl get nodes
-
-
-  build:
-    commands:
-      - echo Building Docker image...
-      - docker build -t brain-tasks-app .
-      - docker tag brain-tasks-app:latest 933367720501.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
-      - echo "Setting up kubeconfig"
-      - aws eks update-kubeconfig --region us-east-1 --name brain-tasks-cluster
-
-      # 👇 ADD DEBUG HERE
-      - echo "=== WHO AM I ==="
-      - aws sts get-caller-identity
-
-      - echo "=== KUBECONFIG ==="
-      - kubectl config view
-
-      - echo "Testing cluster access"
-      - kubectl get nodes  
-
-  post_build:
-    commands:
-      - echo Pushing image...
-      - docker push 933367720501.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
-      - echo Deploying to EKS...
-      - kubectl apply -f deployment.yaml
-      - kubectl apply -f service.yaml
+        - echo "Starting install phase..."
+        - yum install -y unzip || true
+pre_build:
+  commands:
+    - echo "Installing AWS CLI v2..."
+    - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o
+      "awscliv2.zip"
+    - unzip awscliv2.zip
+    - sudo ./aws/install
+    - aws --version
+    - echo Logging in to Amazon ECR...
+    - aws ecr get-login-password --region us-east-1 | docker login --username
+      AWS --password-stdin 933367720501.dkr.ecr.us-east-1.amazonaws.com
+    - echo "Setting up kubeconfig for EKS"
+    - aws eks update-kubeconfig --region us-east-1 --name brain-tasks-cluster
+    - echo "=== WHO AM I ==="
+    - aws sts get-caller-identity
+    - echo "=== KUBECONFIG ==="
+    - kubectl config view
+    - echo "Applying aws-auth config"
+    - kubectl apply -f aws-auth.yaml
+    - echo "Checking cluster connection"
+    - kubectl get nodes
+build:
+  commands:
+    - echo Building Docker image...
+    - docker build -t brain-tasks-app .
+    - docker tag brain-tasks-app:latest
+      933367720501.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
+    - echo "Setting up kubeconfig"
+    - aws eks update-kubeconfig --region us-east-1 --name brain-tasks-cluster
+    - echo "=== WHO AM I ==="
+    - aws sts get-caller-identity
+    - echo "=== KUBECONFIG ==="
+    - kubectl config view
+    - echo "Testing cluster access"
+    - kubectl get nodes
+post_build:
+  commands:
+    - echo Pushing image...
+    - docker push
+      933367720501.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
+    - echo Deploying to EKS...
+    - kubectl apply -f deployment.yaml
+    - kubectl apply -f service.yaml
