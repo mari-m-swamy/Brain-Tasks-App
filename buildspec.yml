@@ -28,7 +28,7 @@ phases:
     commands:
       - echo "Pushing image..."
       - docker push 933367720501.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
-      - echo Deploying to EKS..."
+      - echo "Deploying to EKS..."
       - kubectl apply -f deployment.yaml
       - kubectl apply -f service.yaml
       - echo "Waiting for rollout to complete..."
