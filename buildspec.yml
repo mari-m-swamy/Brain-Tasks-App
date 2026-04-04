@@ -34,3 +34,9 @@ phases:
     
      - echo "Waiting for rollout to complete..."
      - kubectl rollout status deployment/brain-tasks-app --timeout=120s
+
+      - echo "=== VERIFY PODS ==="
+      - kubectl get pods
+
+     - echo "=== VERIFY SERVICES ==="
+     - kubectl get svc
