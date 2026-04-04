@@ -38,5 +38,5 @@ phases:
       - echo "=== VERIFY PODS ==="
       - kubectl get pods
 
-     - echo "=== VERIFY SERVICES ==="
-     - kubectl get svc
+      - echo "=== VERIFY SERVICES ==="
+      - kubectl get svc
