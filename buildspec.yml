@@ -13,6 +13,12 @@ phases:
         | docker login --username AWS --password-stdin 933367720501.dkr.ecr.us-east-1.amazonaws.com
       - echo "Setting up kubeconfig for EKS"
       - aws eks update-kubeconfig --region us-east-1 --name brain-tasks-cluster
+      - echo "=== WHO AM I ==="
+      - aws sts get-caller-identity
+
+      - echo "=== KUBECONFIG ==="
+      - kubectl config view
+
 
       - echo "Checking cluster connection"
       - kubectl get nodes
